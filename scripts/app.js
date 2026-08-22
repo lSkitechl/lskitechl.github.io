@@ -6,6 +6,10 @@
          ======================================================= */
 
       const BOOT_TIME = 3500;
+      const BOOT_SCREEN_FADE_TIME = 700;
+      const FLASH_GAP = 60;
+      const MAIN_PAGE_REVEAL_DELAY =
+        BOOT_SCREEN_FADE_TIME + FLASH_GAP + 520 + 60;
 
       const diagnosticSteps = [
         {
@@ -378,24 +382,24 @@
           }
         );
 
+        bootScreen.classList.add(
+          "boot-complete"
+        );
+
         window.setTimeout(() => {
           screenFlash.classList.add(
             "flash"
           );
-        }, 350);
+        }, BOOT_SCREEN_FADE_TIME + FLASH_GAP);
 
         window.setTimeout(() => {
-          bootScreen.classList.add(
-            "boot-complete"
-          );
-
           mainPage.classList.add(
             "visible"
           );
 
           document.body.style.overflow =
             "auto";
-        }, 650);
+        }, MAIN_PAGE_REVEAL_DELAY);
       }
 
       /* =======================================================
