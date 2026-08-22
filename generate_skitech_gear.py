@@ -1,184 +1,171 @@
-import bpy
-import math
-from mathutils import Vector
+"""Generate a centered, animation-ready industrial gear SVG.
 
-OUTPUT = r"C:\Users\pavel\Desktop\Not Work Projects\Skitech site\skitech-gear.webp"
+Run with Blender's Python interpreter or regular Python. The exporter uses
+native SVG geometry rather than rasterizing the Blender mesh.
+"""
 
-bpy.ops.wm.read_factory_settings(use_empty=True)
+from math import cos, pi, sin
+from pathlib import Path
 
-# Build the wheel from real separate machined parts so the windows remain open.
-parts = []
 
-def add_ring(name, outer_radius, inner_radius, depth):
-    vertices = 128
+OUTPUT = Path(__file__).with_name("skitech-gear.svg")
+TOOTH_COUNT = 30
+SPOKE_COUNT = 6
+RIVET_COUNT = 14
+
+
+def point(radius, angle):
+    return f"{radius * cos(angle):.2f},{radius * sin(angle):.2f}"
+
+
+def polar_path(points):
+    commands = [f"M {point(*points[0])}"]
+    commands.extend(f"L {point(*item)}" for item in points[1:])
+    return " ".join(commands) + " Z"
+
+
+def gear_teeth():
     points = []
-    faces = []
-    for z in (-depth / 2, depth / 2):
-        for radius in (outer_radius, inner_radius):
-            for index in range(vertices):
-                angle = math.tau * index / vertices
-                points.append((math.cos(angle) * radius, math.sin(angle) * radius, z))
-    outer_bottom = 0
-    inner_bottom = vertices
-    outer_top = vertices * 2
-    inner_top = vertices * 3
-    for index in range(vertices):
-        next_index = (index + 1) % vertices
-        faces.extend([
-            (outer_bottom + index, outer_bottom + next_index, outer_top + next_index, outer_top + index),
-            (inner_bottom + next_index, inner_bottom + index, inner_top + index, inner_top + next_index),
-            (outer_top + index, outer_top + next_index, inner_top + next_index, inner_top + index),
-            (outer_bottom + next_index, outer_bottom + index, inner_bottom + index, inner_bottom + next_index),
-        ])
-    mesh = bpy.data.meshes.new(name + " mesh")
-    mesh.from_pydata(points, [], faces)
-    mesh.update()
-    item = bpy.data.objects.new(name, mesh)
-    bpy.context.collection.objects.link(item)
-    parts.append(item)
-    return item
+    step = 2 * pi / TOOTH_COUNT
+    for index in range(TOOTH_COUNT):
+        center = index * step
+        for offset, radius in ((-0.50, 4.18), (-0.34, 4.72), (0.34, 4.72), (0.50, 4.18)):
+            points.append((radius, center + offset * step))
+    return polar_path(points)
 
-add_ring("Outer machined ring", 4.02, 3.18, 0.72)
 
-for index in range(28):
-    angle = math.tau * index / 28
-    x = math.cos(angle) * 4.28
-    y = math.sin(angle) * 4.28
-    bpy.ops.mesh.primitive_cube_add(
-        size=1,
-        location=(x, y, 0),
-        rotation=(0, 0, angle),
+def spoke_path(angle):
+    half_width = 0.36
+    inner = 1.05
+    outer = 3.38
+    return polar_path([
+        (inner, angle - half_width),
+        (outer, angle - half_width * 0.62),
+        (outer, angle + half_width * 0.62),
+        (inner, angle + half_width),
+    ])
+
+
+def rivets():
+    parts = []
+    for index in range(RIVET_COUNT):
+        angle = 2 * pi * index / RIVET_COUNT + pi / RIVET_COUNT
+        x, y = (float(value) for value in point(3.02, angle).split(","))
+        parts.append(
+            f'<circle class="rivet" cx="{x:.2f}" cy="{y:.2f}" r="0.17"/>'
+            f'<path class="rivet-slot" d="M {x - 0.09:.2f},{y - 0.09:.2f} '
+            f'L {x + 0.09:.2f},{y + 0.09:.2f}"/>'
+        )
+    return "\n      ".join(parts)
+
+
+def spoke_bolts():
+    parts = []
+    for index in range(SPOKE_COUNT):
+        angle = 2 * pi * index / SPOKE_COUNT + pi / 6
+        x, y = (float(value) for value in point(2.18, angle).split(","))
+        parts.append(
+            f'<circle class="spoke-bolt-shadow" cx="{x + 0.05:.2f}" cy="{y + 0.06:.2f}" r="0.25"/>'
+            f'<circle class="spoke-bolt" cx="{x:.2f}" cy="{y:.2f}" r="0.22"/>'
+            f'<path class="bolt-slot" d="M {x - 0.10:.2f},{y - 0.10:.2f} L {x + 0.10:.2f},{y + 0.10:.2f}"/>'
+        )
+    return "\n      ".join(parts)
+
+
+def wear_marks():
+    parts = []
+    for index in range(18):
+        angle = 2 * pi * index / 18 + 0.13
+        start = point(3.58, angle)
+        end = point(4.12, angle + 0.035)
+        parts.append(f'<path class="wear" d="M {start} L {end}"/>')
+    return "\n      ".join(parts)
+
+
+def build_svg():
+    spokes = "\n      ".join(
+      f'<path class="spoke-shadow" d="{spoke_path(2 * pi * i / SPOKE_COUNT + pi / 6)}" transform="translate(0.07 0.09)"/>\n'
+      f'      <path class="spoke" d="{spoke_path(2 * pi * i / SPOKE_COUNT + pi / 6)}"/>'
+        for i in range(SPOKE_COUNT)
     )
-    tooth = bpy.context.object
-    tooth.dimensions = (0.82, 0.62, 0.82)
-    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-    parts.append(tooth)
+    teeth = gear_teeth()
+    return f'''<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-5.35 -5.35 10.7 10.7" role="img" aria-labelledby="title desc">
+  <title id="title">SKITECH industrial gear</title>
+  <desc id="desc">A symmetrical weathered bronze gear centered at the origin for CSS rotation.</desc>
+  <defs>
+    <linearGradient id="bronze" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#D49A43"/><stop offset="0.3" stop-color="#8C6430"/>
+      <stop offset="0.62" stop-color="#4C3218"/><stop offset="1" stop-color="#1A110B"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#D49A43"/><stop offset="0.46" stop-color="#8C6430"/><stop offset="1" stop-color="#302014"/>
+    </linearGradient>
+    <radialGradient id="hub" cx="34%" cy="28%" r="78%">
+      <stop offset="0" stop-color="#D49A43"/><stop offset="0.32" stop-color="#8C6430"/>
+      <stop offset="0.76" stop-color="#3B2715"/><stop offset="1" stop-color="#1A110B"/>
+    </radialGradient>
+    <filter id="patina" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.72 0.84" numOctaves="4" seed="37" stitchTiles="stitch" result="fine-grain"/>
+      <feColorMatrix in="fine-grain" type="matrix" values="0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 0.75 0" result="gray-grain"/>
+      <feComponentTransfer in="gray-grain" result="soft-grain">
+        <feFuncR type="gamma" amplitude="0.72" exponent="1.15" offset="0.08"/>
+        <feFuncG type="gamma" amplitude="0.72" exponent="1.15" offset="0.08"/>
+        <feFuncB type="gamma" amplitude="0.72" exponent="1.15" offset="0.08"/>
+        <feFuncA type="table" tableValues="0 0.025 0.06 0.10"/>
+      </feComponentTransfer>
+      <feComposite in="soft-grain" in2="SourceGraphic" operator="in" result="masked-grain"/>
+      <feBlend in="SourceGraphic" in2="masked-grain" mode="multiply" result="darkened-metal"/>
+      <feBlend in="darkened-metal" in2="masked-grain" mode="screen"/>
+    </filter>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="0.10"/></filter>
+  </defs>
+  <g id="gear" transform="rotate(0)" transform-origin="0 0" filter="url(#patina)">
+    <path class="shadow" d="{teeth}" transform="translate(0.08 0.1)"/>
+    <path class="teeth" d="{teeth}"/>
+    <circle class="recess" cx="0" cy="0" r="3.86"/>
+    <circle class="rim-face" cx="0" cy="0" r="3.70"/>
+    <circle class="inner-rim" cx="0" cy="0" r="3.42"/>
+    <circle class="inner-rim-dark" cx="0" cy="0" r="3.18"/>
+    <circle class="inner-shadow" cx="0" cy="0" r="3.08"/>
+    {spokes}
+    {spoke_bolts()}
+    <circle class="hub-shadow" cx="0.06" cy="0.08" r="1.38"/>
+    <circle class="hub" cx="0" cy="0" r="1.30"/>
+    <circle class="hub-face" cx="0" cy="0" r="0.76"/>
+    <circle class="axle" cx="0" cy="0" r="0.35"/>
+    {rivets()}
+    {wear_marks()}
+  </g>
+  <style>
+    .shadow {{ fill: #0B0704; opacity: .8; filter: url(#shadow); }}
+    .teeth {{ fill: url(#bronze); stroke: #D49A43; stroke-width: .035; }}
+    .recess {{ fill: #1A110B; stroke: #4C3218; stroke-width: .12; }}
+    .rim-face {{ fill: none; stroke: url(#bronze); stroke-width: .32; }}
+    .inner-rim {{ fill: none; stroke: url(#edge); stroke-width: .28; }}
+    .inner-rim-dark {{ fill: none; stroke: #1A110B; stroke-width: .16; }}
+    .inner-shadow {{ fill: none; stroke: #0B0704; stroke-width: .22; }}
+    .spoke-shadow {{ fill: #0B0704; opacity: .9; }}
+    .spoke {{ fill: url(#edge); stroke: #D49A43; stroke-opacity: .5; stroke-width: .04; }}
+    .hub-shadow {{ fill: #0B0704; opacity: .85; }}
+    .hub {{ fill: url(#hub); stroke: #D49A43; stroke-width: .06; }}
+    .hub-face {{ fill: none; stroke: #1A110B; stroke-width: .22; }}
+    .axle {{ fill: #1A110B; stroke: #D49A43; stroke-width: .06; }}
+    .rivet {{ fill: #1A110B; stroke: #D49A43; stroke-width: .055; }}
+    .rivet-slot {{ fill: none; stroke: #D49A43; stroke-width: .035; stroke-linecap: round; opacity: .75; }}
+    .spoke-bolt-shadow {{ fill: #080503; opacity: .9; }}
+    .spoke-bolt {{ fill: url(#hub); stroke: #8C6430; stroke-width: .045; }}
+    .bolt-slot {{ fill: none; stroke: #1A110B; stroke-width: .045; stroke-linecap: round; }}
+    .wear {{ fill: none; stroke: #D49A43; stroke-width: .025; stroke-linecap: round; opacity: .32; }}
+  </style>
+</svg>
+'''
 
-for index in range(5):
-    angle = math.tau * index / 5 + 0.18
-    bpy.ops.mesh.primitive_cube_add(
-        size=1,
-        location=(math.cos(angle) * 1.9, math.sin(angle) * 1.9, 0),
-        rotation=(0, 0, angle),
-    )
-    spoke = bpy.context.object
-    spoke.dimensions = (3.3, 0.64, 0.62)
-    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-    parts.append(spoke)
 
-add_ring("Central hub", 1.35, 0.62, 0.9)
+def main():
+    OUTPUT.write_text(build_svg(), encoding="utf-8", newline="\n")
+    print(f"Wrote {OUTPUT}")
 
-for index in range(5):
-    angle = math.tau * index / 5 + 0.18
-    bpy.ops.mesh.primitive_cylinder_add(
-        vertices=32,
-        radius=0.17,
-        depth=0.94,
-        location=(math.cos(angle) * 2.38, math.sin(angle) * 2.38, 0.02),
-    )
-    bolt = bpy.context.object
-    parts.append(bolt)
 
-bpy.context.view_layer.objects.active = parts[0]
-for item in bpy.context.selected_objects:
-    item.select_set(False)
-for item in parts:
-    item.select_set(True)
-bpy.ops.object.join()
-gear = bpy.context.object
-gear.name = "SKITECH_GEAR"
-
-bevel = gear.modifiers.new("Machined bevels", "BEVEL")
-bevel.width = 0.11
-bevel.segments = 4
-bevel.limit_method = "ANGLE"
-bpy.context.view_layer.objects.active = gear
-bpy.ops.object.modifier_apply(modifier=bevel.name)
-
-weighted = gear.modifiers.new("Weighted normals", "WEIGHTED_NORMAL")
-weighted.keep_sharp = True
-bpy.ops.object.modifier_apply(modifier=weighted.name)
-
-# Aged bronze PBR material: color variation, roughness variation, and fine bump.
-material = bpy.data.materials.new("Aged industrial bronze")
-material.use_nodes = True
-nodes = material.node_tree.nodes
-links = material.node_tree.links
-nodes.clear()
-output = nodes.new("ShaderNodeOutputMaterial")
-bsdf = nodes.new("ShaderNodeBsdfPrincipled")
-bsdf.inputs["Metallic"].default_value = 1.0
-bsdf.inputs["Roughness"].default_value = 0.48
-bsdf.inputs["IOR"].default_value = 1.45
-noise = nodes.new("ShaderNodeTexNoise")
-noise.inputs["Scale"].default_value = 7.0
-noise.inputs["Detail"].default_value = 5.0
-noise.inputs["Roughness"].default_value = 0.72
-ramp = nodes.new("ShaderNodeValToRGB")
-ramp.color_ramp.elements[0].position = 0.28
-ramp.color_ramp.elements[0].color = (0.028, 0.012, 0.004, 1)
-ramp.color_ramp.elements[1].position = 0.72
-ramp.color_ramp.elements[1].color = (0.34, 0.12, 0.028, 1)
-rough_ramp = nodes.new("ShaderNodeValToRGB")
-rough_ramp.color_ramp.elements[0].position = 0.25
-rough_ramp.color_ramp.elements[0].color = (0.3, 0.3, 0.3, 1)
-rough_ramp.color_ramp.elements[1].position = 0.75
-rough_ramp.color_ramp.elements[1].color = (0.68, 0.68, 0.68, 1)
-bump = nodes.new("ShaderNodeBump")
-bump.inputs["Strength"].default_value = 0.16
-bump.inputs["Distance"].default_value = 0.08
-links.new(noise.outputs["Fac"], ramp.inputs["Fac"])
-links.new(ramp.outputs["Color"], bsdf.inputs["Base Color"])
-links.new(noise.outputs["Fac"], rough_ramp.inputs["Fac"])
-links.new(rough_ramp.outputs["Color"], bsdf.inputs["Roughness"])
-links.new(noise.outputs["Fac"], bump.inputs["Height"])
-links.new(bump.outputs["Normal"], bsdf.inputs["Normal"])
-links.new(bsdf.outputs["BSDF"], output.inputs["Surface"])
-gear.data.materials.append(material)
-
-# Camera and industrial lighting emphasize bevels while retaining deep shadow.
-bpy.ops.object.camera_add(location=(0, 0, 11.8), rotation=(0, 0, 0))
-camera = bpy.context.object
-camera.data.type = "ORTHO"
-camera.data.ortho_scale = 11.2
-camera.rotation_euler = (0, 0, 0)
-# Point the camera down toward the wheel.
-camera.rotation_euler = (0, 0, 0)
-bpy.context.scene.camera = camera
-
-bpy.ops.object.light_add(type="AREA", location=(-4.5, -4.0, 7.0))
-key = bpy.context.object
-key.data.energy = 900
-key.data.shape = "DISK"
-key.data.size = 5.0
-key.data.color = (1.0, 0.48, 0.16)
-key.rotation_euler = (0.35, 0.0, -0.55)
-
-bpy.ops.object.light_add(type="AREA", location=(5.0, 2.0, 4.0))
-rim = bpy.context.object
-rim.data.energy = 340
-rim.data.size = 4.0
-rim.data.color = (0.55, 0.2, 0.06)
-rim.rotation_euler = (0.6, 0.0, 2.4)
-
-scene = bpy.context.scene
-scene.render.engine = "BLENDER_EEVEE"
-scene.render.resolution_x = 1400
-scene.render.resolution_y = 1400
-scene.render.resolution_percentage = 100
-scene.render.image_settings.file_format = "WEBP"
-scene.render.image_settings.color_mode = "RGBA"
-scene.render.image_settings.color_depth = "8"
-scene.render.filepath = OUTPUT
-scene.render.film_transparent = True
-scene.render.image_settings.color_mode = "RGBA"
-scene.world = bpy.data.worlds.new("Industrial black world")
-scene.world.color = (0.002, 0.001, 0.0005)
-scene.render.film_transparent = True
-bpy.ops.wm.save_as_mainfile(filepath=r"C:\Users\pavel\Desktop\Not Work Projects\Skitech site\skitech-gear.blend")
-bpy.ops.export_scene.gltf(
-    filepath=r"C:\Users\pavel\Desktop\Not Work Projects\Skitech site\skitech-gear.glb",
-    export_format="GLB",
-    use_selection=True,
-)
-bpy.ops.render.render(write_still=True)
+if __name__ == "__main__":
+    main()
