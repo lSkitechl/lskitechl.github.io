@@ -1,34 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta
-    name="description"
-    content="SKITECH Personal Operating System"
-  />
-
   <title>SKITECH OS</title>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet" href="styles/site.css" />
+  <meta property="og:title" content="SKITECH OS">
+  <meta name="description" content="SKITECH Personal Operating System"/>
+  <meta property="og:url" content="https://lskitechl.github.io">
 </head>
 
 <body>
+  <link rel="stylesheet" href="styles/site.css" />
   <div class="site-shell">
-
-    <!-- =======================================================
-         BOOT SCREEN
-         ======================================================= -->
-
+    <!-- = BOOT SCREEN = -->
     <section id="bootScreen" aria-label="SKITECH OS boot sequence">
-
-
       <div class="gear-wrap" aria-hidden="true">
-        <img
-          class="gear-render"
-          src="skitech-gear.svg?v=20260823-2"
-          alt=""
-        />
+        <img class="gear-render" src="skitech-gear.svg?v=20260823-2" alt=""/>
         <div class="gear" id="mainGear">
           <svg viewBox="0 0 420 420" role="presentation" focusable="false">
             <defs>
@@ -243,9 +232,7 @@
       </div>
 
       <div class="mechanical-frame">
-
         <div class="monitor">
-
           <div class="corner tl"></div>
           <div class="corner tr"></div>
           <div class="corner br"></div>
@@ -255,18 +242,13 @@
             <span>SKITECH BIOS v1.0.0</span>
             <span class="clock" id="clock">00:00:00 UTC</span>
           </header>
-
           <div class="boot-content">
-
             <div>
               <h1 class="boot-title">SKITECH OS</h1>
-
               <p class="boot-subtitle">
                 PERSONAL OPERATING SYSTEM
               </p>
-
               <div class="diagnostics">
-
                 <div class="diagnostic-row" data-step="0">
                   <span>CORE</span>
                   <span class="dots"></span>
@@ -309,26 +291,18 @@
                 <div class="iris-inner"></div>
               </div>
             </div>
-
           </div>
-
           <div class="loading-section">
-
             <div>
               <div class="loading-label">LOADING OS</div>
-
               <div class="percentage">
                 <span id="percentage">0</span>%
               </div>
             </div>
 
             <div class="progress-wrapper">
-
               <div class="progress-track">
-                <div
-                  class="progress-bar"
-                  id="progressBar">
-                </div>
+                <div class="progress-bar" id="progressBar"></div>
               </div>
 
               <div class="progress-meta">
@@ -347,32 +321,21 @@
                   EST. 00:04
                 </span>
               </div>
-
             </div>
-
           </div>
-
           <footer class="boot-footer" id="bootFooter">
             // STAND BY. INITIALIZING INTERFACE. //
           </footer>
-
         </div>
       </div>
     </section>
 
-    <!-- =======================================================
-         TEMPORARY MAIN PAGE
-         ======================================================= -->
+    <!-- = TEMPORARY MAIN PAGE = -->
 
     <main id="mainPage">
-
       <div class="page-frame">
-
         <nav class="main-nav">
-          <div>
-            SKITECH OS / CORE
-          </div>
-
+          <div>SKITECH OS / CORE</div>
           <div class="main-nav-right">
             <span>
               <span class="system-dot"></span>
@@ -385,15 +348,13 @@
               type="button">
               REPLAY BOOT
             </button>
-
+            
             <span>EN</span>
           </div>
         </nav>
-
+        
         <section class="hero">
-
           <div>
-
             <p class="hero-kicker">
               PERSONAL SYSTEM / BUILD 001
             </p>
@@ -409,35 +370,14 @@
             </p>
 
             <div class="hero-actions">
-
-              <button
-                class="system-button"
-                type="button">
-                PROJECTS
-              </button>
-
-              <button
-                class="system-button"
-                type="button">
-                TOOLS
-              </button>
-
-              <button
-                class="system-button"
-                type="button">
-                GAMING
-              </button>
-
+              <button class="system-button" type="button"> PROJECTS </button>
+              <button class="system-button" type="button"> TOOLS </button>
+              <button class="system-button" type="button"> GAMING </button>
             </div>
-
           </div>
 
           <aside class="module-panel">
-
-            <p class="module-panel-title">
-              AVAILABLE MODULES
-            </p>
-
+            <p class="module-panel-title">AVAILABLE MODULES</p>
             <div class="module-item">
               <span class="module-number">01</span>
               <span>PROJECTS</span>
@@ -477,28 +417,18 @@
                 ONLINE
               </span>
             </div>
-
           </aside>
-
         </section>
-
       </div>
-
     </main>
 
     <!-- visual overlays -->
     <div class="noise"></div>
     <div class="scanlines"></div>
     <div class="vignette"></div>
-
-    <div
-      class="screen-flash"
-      id="screenFlash">
-    </div>
-
+    <div class="screen-flash" id="screenFlash"></div>
   </div>
-
-
+  
   <script src="scripts/app.js" defer></script>
-</body>
+  </body>
 </html>
