@@ -49,9 +49,7 @@
       font: inherit;
     }
 
-    /* =========================================================
-       GLOBAL BACKGROUND
-       ========================================================= */
+    /* = GLOBAL BACKGROUND = */
 
     .site-shell {
       position: relative;
@@ -158,31 +156,16 @@
         );
 
       background-size: 17px 19px;
-
       animation: noiseMove 0.18s steps(2) infinite;
       mix-blend-mode: screen;
     }
 
     @keyframes noiseMove {
-      0% {
-        transform: translate3d(0, 0, 0);
-      }
-
-      25% {
-        transform: translate3d(-2%, 1%, 0);
-      }
-
-      50% {
-        transform: translate3d(1%, -2%, 0);
-      }
-
-      75% {
-        transform: translate3d(2%, 1%, 0);
-      }
-
-      100% {
-        transform: translate3d(-1%, 2%, 0);
-      }
+      0% { transform: translate3d(0, 0, 0); }
+      25% { transform: translate3d(-2%, 1%, 0); }
+      50% { transform: translate3d(1%, -2%, 0); }
+      75% { transform: translate3d(2%, 1%, 0); }
+      100% { transform: translate3d(-1%, 2%, 0); }
     }
 
     .scanlines {
@@ -213,9 +196,7 @@
         inset 0 0 35px rgba(0, 0, 0, 0.7);
     }
 
-    /* =========================================================
-       BOOT SCREEN
-       ========================================================= */
+    /* = BOOT SCREEN = */
 
     #bootScreen {
       position: absolute;
@@ -243,7 +224,7 @@
       opacity: 0.58;
       background:
         linear-gradient(rgba(4, 3, 2, 0.28), rgba(4, 3, 2, 0.42)),
-        url("../assets/skitech-background.svg") center / cover no-repeat;
+        url("../svg/skitech-background.svg") center / cover no-repeat;
       filter: saturate(0.78) contrast(1.08);
     }
 
@@ -367,9 +348,7 @@
       }
     }
 
-    /* =========================================================
-       CORNERS / FRAME DETAILS
-       ========================================================= */
+    /* = CORNERS / FRAME DETAILS = */
 
     .corner {
       position: absolute;
@@ -419,9 +398,7 @@
       transform: rotate(270deg);
     }
 
-    /* =========================================================
-       HEADER
-       ========================================================= */
+    /* = HEADER = */
 
     .boot-header {
       position: relative;
@@ -445,9 +422,7 @@
       text-align: right;
     }
 
-    /* =========================================================
-       MAIN BOOT CONTENT
-       ========================================================= */
+    /* = MAIN BOOT CONTENT = */
 
     .boot-content {
       position: relative;
@@ -551,9 +526,7 @@
       opacity: 1;
     }
 
-    /* =========================================================
-       IRIS
-       ========================================================= */
+    /* = IRIS = */
 
     .iris-section {
       display: flex;
@@ -669,9 +642,7 @@
       }
     }
 
-    /* =========================================================
-       LOADING AREA
-       ========================================================= */
+    /* = LOADING AREA = */
 
     .loading-section {
       position: relative;
@@ -710,23 +681,11 @@
 
     .progress-track {
       position: relative;
-
       width: 100%;
       height: 26px;
-
       border: 1px solid rgba(222, 142, 31, 0.76);
-
-      background:
-        repeating-linear-gradient(
-          135deg,
-          rgba(167, 96, 18, 0.12) 0 3px,
-          transparent 3px 7px
-        );
-
-      box-shadow:
-        inset 0 0 10px rgba(0, 0, 0, 0.9),
-        0 0 5px rgba(217, 133, 25, 0.08);
-
+      background: repeating-linear-gradient(135deg, rgba(167, 96, 18, 0.12) 0 3px, transparent 3px 7px);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9), 0 0 5px rgba(217, 133, 25, 0.08);
       overflow: hidden;
     }
 
@@ -734,18 +693,8 @@
       height: 100%;
       width: 0%;
 
-      background:
-        linear-gradient(
-          90deg,
-          #bd7218,
-          #e49826 60%,
-          #f0a22f
-        );
-
-      box-shadow:
-        0 0 10px rgba(243, 156, 39, 0.3),
-        inset 0 0 10px rgba(255, 208, 105, 0.12);
-
+      background: linear-gradient(90deg,#bd7218,#e49826 60%,#f0a22f);
+      box-shadow: 0 0 10px rgba(243, 156, 39, 0.3), inset 0 0 10px rgba(255, 208, 105, 0.12);
       transition: width 120ms linear;
     }
 
@@ -754,13 +703,7 @@
       display: block;
       width: 100%;
       height: 100%;
-
-      background:
-        repeating-linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.08) 0 1px,
-          transparent 1px 4px
-        );
+      background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 4px);
     }
 
     .progress-meta {
@@ -782,9 +725,7 @@
       color: var(--amber);
     }
 
-    /* =========================================================
-       FOOTER MESSAGE
-       ========================================================= */
+    /* = FOOTER MESSAGE = */
 
     .boot-footer {
       position: relative;
@@ -807,9 +748,7 @@
     }
 
 
-    /* =========================================================
-       LARGE LEFT REFERENCE GEAR
-       ========================================================= */
+    /* = LARGE LEFT REFERENCE GEAR = */
 
     /*
       This is intentionally outside the monitor, like the reference:
@@ -954,9 +893,7 @@
       }
     }
 
-    /* =========================================================
-       BOOT FLASH
-       ========================================================= */
+    /* = BOOT FLASH = */
 
     .screen-flash {
       position: fixed;
@@ -987,9 +924,7 @@
       }
     }
 
-    /* =========================================================
-       MAIN PAGE
-       ========================================================= */
+    /* = MAIN PAGE = */
 
     #mainPage {
       position: absolute;
@@ -1230,9 +1165,7 @@
       color: var(--amber);
     }
 
-    /* =========================================================
-       RESPONSIVE
-       ========================================================= */
+    /* = RESPONSIVE = */
 
     @media (max-width: 900px) {
       .mechanical-frame {
@@ -1346,7 +1279,6 @@
       *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
-
         scroll-behavior: auto !important;
       }
     }

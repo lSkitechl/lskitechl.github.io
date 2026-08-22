@@ -9,226 +9,16 @@
   <meta property="og:title" content="SKITECH OS">
   <meta name="description" content="SKITECH Personal Operating System"/>
   <meta property="og:url" content="https://lskitechl.github.io">
+  <link rel="icon" href="assets/svg/favicon.svg" type="image/svg">
 </head>
 
 <body>
-  <link rel="stylesheet" href="styles/site.css" />
+  <link rel="stylesheet" href="assets/styles/site.css" />
   <div class="site-shell">
     <!-- = BOOT SCREEN = -->
     <section id="bootScreen" aria-label="SKITECH OS boot sequence">
-      <div class="gear-wrap" aria-hidden="true">
-        <img class="gear-render" src="skitech-gear.svg?v=20260823-2" alt=""/>
-        <div class="gear" id="mainGear">
-          <svg viewBox="0 0 420 420" role="presentation" focusable="false">
-            <defs>
-              <filter
-                id="gearMaterial"
-                x="-12%"
-                y="-12%"
-                width="124%"
-                height="124%"
-                color-interpolation-filters="sRGB"
-              >
-                <feTurbulence
-                  type="fractalNoise"
-                  baseFrequency="0.28"
-                  numOctaves="2"
-                  seed="23"
-                  result="metalNoise"
-                />
-                <feColorMatrix
-                  in="metalNoise"
-                  type="saturate"
-                  values="0"
-                  result="metalGrain"
-                />
-                <feComponentTransfer
-                  in="metalGrain"
-                  result="subtleGrain"
-                >
-                  <feFuncA type="table" tableValues="0 0.055" />
-                </feComponentTransfer>
-                <feBlend
-                  in="SourceGraphic"
-                  in2="subtleGrain"
-                  mode="multiply"
-                  result="roughMetal"
-                />
-                <feGaussianBlur
-                  in="SourceAlpha"
-                  stdDeviation="1.6"
-                  result="edgeMask"
-                />
-                <feSpecularLighting
-                  in="edgeMask"
-                  surfaceScale="2.4"
-                  specularConstant="0.32"
-                  specularExponent="18"
-                  lighting-color="#e7a34a"
-                  result="bevelLight"
-                >
-                  <feDistantLight azimuth="228" elevation="48" />
-                </feSpecularLighting>
-                <feComposite
-                  in="bevelLight"
-                  in2="SourceAlpha"
-                  operator="in"
-                  result="clippedBevel"
-                />
-                <feDiffuseLighting
-                  in="edgeMask"
-                  surfaceScale="1.7"
-                  diffuseConstant="0.55"
-                  lighting-color="#7c4e20"
-                  result="bodyLight"
-                >
-                  <feDistantLight azimuth="228" elevation="48" />
-                </feDiffuseLighting>
-                <feComposite
-                  in="bodyLight"
-                  in2="SourceAlpha"
-                  operator="in"
-                  result="clippedBody"
-                />
-                <feBlend
-                  in="roughMetal"
-                  in2="clippedBody"
-                  mode="multiply"
-                  result="shadedMetal"
-                />
-                <feBlend
-                  in="shadedMetal"
-                  in2="clippedBevel"
-                  mode="screen"
-                />
-              </filter>
-
-              <linearGradient id="gearOuterMetal" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#24170b"/>
-                <stop offset="0.22" stop-color="#70471e"/>
-                <stop offset="0.42" stop-color="#b1732f"/>
-                <stop offset="0.58" stop-color="#553516"/>
-                <stop offset="0.78" stop-color="#8a5721"/>
-                <stop offset="1" stop-color="#1b1108"/>
-              </linearGradient>
-
-              <linearGradient id="gearSpokeMetal" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#805021"/>
-                <stop offset="0.46" stop-color="#2e1d0e"/>
-                <stop offset="1" stop-color="#69411a"/>
-              </linearGradient>
-
-              <radialGradient id="gearHubMetal">
-                <stop offset="0" stop-color="#94632d"/>
-                <stop offset="0.25" stop-color="#2b1c0d"/>
-                <stop offset="0.58" stop-color="#6b451e"/>
-                <stop offset="1" stop-color="#120c06"/>
-              </radialGradient>
-
-              <!-- One tooth, copied around the wheel. -->
-              <path
-                id="gearTooth"
-                d="M195 10 L225 10 L229 48 L191 48 Z"
-              />
-            </defs>
-
-            <!-- 24 substantial rectangular teeth, matching the reference silhouette. -->
-            <g class="gear-outer">
-              <use href="#gearTooth" transform="rotate(0 210 210)"/>
-              <use href="#gearTooth" transform="rotate(15 210 210)"/>
-              <use href="#gearTooth" transform="rotate(30 210 210)"/>
-              <use href="#gearTooth" transform="rotate(45 210 210)"/>
-              <use href="#gearTooth" transform="rotate(60 210 210)"/>
-              <use href="#gearTooth" transform="rotate(75 210 210)"/>
-              <use href="#gearTooth" transform="rotate(90 210 210)"/>
-              <use href="#gearTooth" transform="rotate(105 210 210)"/>
-              <use href="#gearTooth" transform="rotate(120 210 210)"/>
-              <use href="#gearTooth" transform="rotate(135 210 210)"/>
-              <use href="#gearTooth" transform="rotate(150 210 210)"/>
-              <use href="#gearTooth" transform="rotate(165 210 210)"/>
-              <use href="#gearTooth" transform="rotate(180 210 210)"/>
-              <use href="#gearTooth" transform="rotate(195 210 210)"/>
-              <use href="#gearTooth" transform="rotate(210 210 210)"/>
-              <use href="#gearTooth" transform="rotate(225 210 210)"/>
-              <use href="#gearTooth" transform="rotate(240 210 210)"/>
-              <use href="#gearTooth" transform="rotate(255 210 210)"/>
-              <use href="#gearTooth" transform="rotate(270 210 210)"/>
-              <use href="#gearTooth" transform="rotate(285 210 210)"/>
-              <use href="#gearTooth" transform="rotate(300 210 210)"/>
-              <use href="#gearTooth" transform="rotate(315 210 210)"/>
-              <use href="#gearTooth" transform="rotate(330 210 210)"/>
-              <use href="#gearTooth" transform="rotate(345 210 210)"/>
-
-              <circle cx="210" cy="210" r="166"/>
-            </g>
-
-            <!-- Deep stepped rings give the wheel the heavy machined look. -->
-            <circle class="gear-inner-dark" cx="210" cy="210" r="132"/>
-            <circle class="gear-inner-ring" cx="210" cy="210" r="150"/>
-            <circle
-              cx="210"
-              cy="210"
-              r="115"
-              fill="#171009"
-              stroke="#69431d"
-              stroke-width="3"
-            />
-
-            <!-- Five broad spokes, closer to the shape in the supplied reference. -->
-            <g>
-              <path class="gear-spoke" d="M197 200 L125 119 Q119 112 127 104 L143 92 Q152 87 158 96 L215 191 Z"/>
-              <path class="gear-spoke" d="M221 197 L281 94 Q286 84 296 89 L313 101 Q320 108 314 117 L232 211 Z"/>
-              <path class="gear-spoke" d="M231 221 L339 250 Q350 254 346 265 L339 284 Q335 293 325 289 L224 234 Z"/>
-              <path class="gear-spoke" d="M210 234 L204 348 Q204 359 193 358 L173 356 Q163 353 166 343 L195 229 Z"/>
-              <path class="gear-spoke" d="M190 218 L83 251 Q72 254 69 243 L64 223 Q63 213 74 211 L190 204 Z"/>
-            </g>
-
-            <circle class="gear-hub" cx="210" cy="210" r="54"/>
-            <circle
-              cx="210"
-              cy="210"
-              r="35"
-              fill="#130d07"
-              stroke="#70491f"
-              stroke-width="4"
-            />
-            <circle
-              cx="210"
-              cy="210"
-              r="13"
-              fill="#090604"
-              stroke="#845722"
-              stroke-width="4"
-            />
-
-            <!-- Visible fasteners like the reference. -->
-            <g>
-              <circle class="gear-bolt" cx="210" cy="105" r="10"/>
-              <line class="gear-bolt-slot" x1="205" y1="105" x2="215" y2="105"/>
-
-              <circle class="gear-bolt" cx="310" cy="177" r="10"/>
-              <line class="gear-bolt-slot" x1="305" y1="177" x2="315" y2="177"/>
-
-              <circle class="gear-bolt" cx="272" cy="295" r="10"/>
-              <line class="gear-bolt-slot" x1="267" y1="295" x2="277" y2="295"/>
-
-              <circle class="gear-bolt" cx="148" cy="295" r="10"/>
-              <line class="gear-bolt-slot" x1="143" y1="295" x2="153" y2="295"/>
-
-              <circle class="gear-bolt" cx="110" cy="177" r="10"/>
-              <line class="gear-bolt-slot" x1="105" y1="177" x2="115" y2="177"/>
-            </g>
-
-            <!-- A few subtle scratches so the SVG is less flat. -->
-            <g>
-              <path class="gear-scratch" d="M92 123 L131 112"/>
-              <path class="gear-scratch" d="M278 94 L306 112"/>
-              <path class="gear-scratch" d="M310 286 L280 305"/>
-              <path class="gear-scratch" d="M118 299 L151 309"/>
-              <path class="gear-scratch" d="M60 209 L99 201"/>
-            </g>
-          </svg>
-        </div>
+      <div class="gear-wrap" aria-hidden="true"> 
+        <img class="gear-render" src="assets/svg/skitech-gear.svg" alt=""/> 
       </div>
 
       <div class="mechanical-frame">
@@ -245,9 +35,7 @@
           <div class="boot-content">
             <div>
               <h1 class="boot-title">SKITECH OS</h1>
-              <p class="boot-subtitle">
-                PERSONAL OPERATING SYSTEM
-              </p>
+              <p class="boot-subtitle">PERSONAL OPERATING SYSTEM</p>
               <div class="diagnostics">
                 <div class="diagnostic-row" data-step="0">
                   <span>CORE</span>
@@ -278,26 +66,18 @@
                   <span class="dots"></span>
                   <span class="diagnostic-value">WAIT</span>
                 </div>
-
               </div>
-
-              <div class="runtime" id="runtimeText">
-                INITIALIZING SYSTEM RUNTIME...
-              </div>
+              <div class="runtime" id="runtimeText">INITIALIZING SYSTEM RUNTIME...</div>
             </div>
 
             <div class="iris-section" aria-hidden="true">
-              <div class="iris-ui">
-                <div class="iris-inner"></div>
-              </div>
+              <div class="iris-ui"><div class="iris-inner"></div></div>
             </div>
           </div>
           <div class="loading-section">
             <div>
               <div class="loading-label">LOADING OS</div>
-              <div class="percentage">
-                <span id="percentage">0</span>%
-              </div>
+              <div class="percentage"> <span id="percentage">0</span>%</div>
             </div>
 
             <div class="progress-wrapper">
@@ -306,26 +86,13 @@
               </div>
 
               <div class="progress-meta">
-                <span
-                  class="status-line"
-                  id="statusLine">
-                  BOOT SECTOR INITIALIZATION...
-                </span>
-
-                <span class="progress-count">
-                  <span id="progressCount">0</span>
-                  / 100
-                </span>
-
-                <span id="estimatedTime">
-                  EST. 00:04
-                </span>
+                <span class="status-line" id="statusLine"> BOOT SECTOR INITIALIZATION...</span>
+                <span class="progress-count"><span id="progressCount">0</span>/ 100</span>
+                <span id="estimatedTime">EST. 00:04</span>
               </div>
             </div>
           </div>
-          <footer class="boot-footer" id="bootFooter">
-            // STAND BY. INITIALIZING INTERFACE. //
-          </footer>
+          <footer class="boot-footer" id="bootFooter">// STAND BY. INITIALIZING INTERFACE. //</footer>
         </div>
       </div>
     </section>
@@ -337,31 +104,16 @@
         <nav class="main-nav">
           <div>SKITECH OS / CORE</div>
           <div class="main-nav-right">
-            <span>
-              <span class="system-dot"></span>
-              ONLINE
-            </span>
-
-            <button
-              class="replay"
-              id="replayButton"
-              type="button">
-              REPLAY BOOT
-            </button>
-            
+            <span><span class="system-dot"></span>ONLINE</span>
+            <button class="replay" id="replayButton" type="button"> REPLAY BOOT</button>
             <span>EN</span>
           </div>
         </nav>
         
         <section class="hero">
           <div>
-            <p class="hero-kicker">
-              PERSONAL SYSTEM / BUILD 001
-            </p>
-
-            <h2 class="hero-title">
-              SKITECH
-            </h2>
+            <p class="hero-kicker">PERSONAL SYSTEM / BUILD 001</p>
+            <h2 class="hero-title">SKITECH</h2>
 
             <p class="hero-description">
               Software, automation, tools, experiments
@@ -381,41 +133,31 @@
             <div class="module-item">
               <span class="module-number">01</span>
               <span>PROJECTS</span>
-              <span class="module-status">
-                ONLINE
-              </span>
+              <span class="module-status">ONLINE</span>
             </div>
 
             <div class="module-item">
               <span class="module-number">02</span>
               <span>TOOLS</span>
-              <span class="module-status">
-                ONLINE
-              </span>
+              <span class="module-status">ONLINE</span>
             </div>
 
             <div class="module-item">
               <span class="module-number">03</span>
               <span>GAMING</span>
-              <span class="module-status">
-                ONLINE
-              </span>
+              <span class="module-status">ONLINE</span>
             </div>
 
             <div class="module-item">
               <span class="module-number">04</span>
               <span>LAB</span>
-              <span class="module-status">
-                STANDBY
-              </span>
+              <span class="module-status">STANDBY</span>
             </div>
 
             <div class="module-item">
               <span class="module-number">05</span>
               <span>ABOUT</span>
-              <span class="module-status">
-                ONLINE
-              </span>
+              <span class="module-status">ONLINE</span>
             </div>
           </aside>
         </section>
@@ -429,6 +171,6 @@
     <div class="screen-flash" id="screenFlash"></div>
   </div>
   
-  <script src="scripts/app.js" defer></script>
+  <script src="assets/scripts/app.js" defer></script>
   </body>
 </html>
