@@ -1,0 +1,201 @@
+@import "../styles/tokens.css";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  background: var(--bg);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  color: var(--text);
+  font-family:
+    "Courier New",
+    "Lucida Console",
+    Monaco,
+    monospace;
+}
+
+button,
+a {
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* = GLOBAL SHELL (wraps boot screen + main page + overlays) = */
+
+.site-shell {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+
+  background:
+    radial-gradient(ellipse at 92% 48%, rgba(112, 68, 20, 0.2) 0%, rgba(45, 28, 12, 0.12) 24%, transparent 48%),
+    radial-gradient(circle at 56% 42%, rgba(138, 79, 10, 0.12), transparent 42%),
+    radial-gradient(circle at 100% 50%, rgba(113, 67, 16, 0.18), transparent 44%),
+    linear-gradient(130deg, #020201, #0c0804 45%, #030201);
+}
+
+.site-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.45;
+
+  background:
+    repeating-linear-gradient(
+      118deg,
+      transparent 0,
+      transparent 46px,
+      rgba(195, 119, 28, 0.018) 47px,
+      transparent 48px,
+      transparent 91px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.012) 0,
+      rgba(255, 255, 255, 0.012) 1px,
+      transparent 1px,
+      transparent 5px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 158, 43, 0.018) 0,
+      rgba(255, 158, 43, 0.018) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+}
+
+.site-shell::after {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.1;
+  mix-blend-mode: soft-light;
+
+  background:
+    radial-gradient(ellipse at 88% 44%, rgba(218, 143, 47, 0.13) 0, transparent 22%),
+    repeating-linear-gradient(
+      164deg,
+      rgba(255, 194, 92, 0.018) 0 1px,
+      transparent 1px 19px,
+      rgba(0, 0, 0, 0.045) 20px 21px,
+      transparent 22px 43px
+    );
+
+  filter: blur(0.25px) contrast(1.08);
+}
+
+.noise {
+  position: fixed;
+  inset: -25%;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0.018;
+
+  background-image: repeating-radial-gradient(circle at 17% 32%, #fff 0 0.6px, transparent 0.7px 4px);
+
+  background-size: 17px 19px;
+  animation: noiseMove 0.18s steps(2) infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes noiseMove {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(-2%, 1%, 0);
+  }
+  50% {
+    transform: translate3d(1%, -2%, 0);
+  }
+  75% {
+    transform: translate3d(2%, 1%, 0);
+  }
+  100% {
+    transform: translate3d(-1%, 2%, 0);
+  }
+}
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 201;
+  pointer-events: none;
+  opacity: 0.2;
+
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.012) 0px,
+    rgba(255, 255, 255, 0.012) 1px,
+    rgba(0, 0, 0, 0.12) 2px,
+    rgba(0, 0, 0, 0.12) 4px
+  );
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 202;
+  pointer-events: none;
+
+  box-shadow:
+    inset 0 0 130px 40px rgba(0, 0, 0, 0.85),
+    inset 0 0 35px rgba(0, 0, 0, 0.7);
+}
+
+/* = BOOT -> MAIN PAGE FLASH TRANSITION = */
+
+.screen-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+
+  background: #d88718;
+  pointer-events: none;
+
+  opacity: 0;
+}
+
+.screen-flash.is-active {
+  animation: flashAnimation 520ms ease-out forwards;
+}
+
+@keyframes flashAnimation {
+  0% {
+    opacity: 0;
+  }
+  32% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

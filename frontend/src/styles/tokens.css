@@ -1,0 +1,34 @@
+/* Design tokens: single source of truth for colors, spacing and stacking order. */
+:root {
+  --bg: #070604;
+  --bg-warm: #0e0b07;
+  --panel: #100c07;
+  --panel-2: #171008;
+
+  --amber: #d99024;
+  --amber-bright: #ffad32;
+  --amber-soft: #a76716;
+  --amber-dark: #60400f;
+
+  --metal: #211a12;
+  --metal-light: #38291a;
+
+  --text: #d99228;
+  --text-dim: #87591c;
+
+  --border: rgba(207, 132, 30, 0.48);
+  --border-soft: rgba(207, 132, 30, 0.18);
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 32px;
+
+  --radius-panel: 8px;
+
+  --z-background: 0;
+  --z-mechanics: 10;
+  --z-content: 20;
+  --z-navigation: 50;
+  --z-overlay: 100;
+}
